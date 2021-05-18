@@ -1,3 +1,5 @@
+#!/bin/sh
+cd "/usr/share/nginx/html"
 if [ ! -f "conf/app.ini" ]; then
     echo "conf/app.ini not found"
     if [ -f "conf/app.ini.sample" ]; then
