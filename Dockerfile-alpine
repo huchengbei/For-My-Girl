@@ -12,7 +12,8 @@ COPY ./frontend /home/node/app
 RUN npm i
 RUN yarn build
 
-FROM nginx:stable
+FROM nginx:alpine
+RUN apk --no-cache add ca-certificates
 WORKDIR /usr/share/nginx/html
 COPY --from=gobuilder /go/src/github.com/huchengbei/for-my-girl/backend/app ./app
 COPY --from=vuebuilder /home/node/app/dist ./
