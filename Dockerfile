@@ -20,5 +20,6 @@ RUN mkdir ./conf
 COPY ./conf/app.ini.sample ./conf/app.ini.sample
 COPY ./conf/nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./entrypoint.sh /docker-entrypoint.d/40-go-moment.sh
+RUN chmod +x /docker-entrypoint.d/40-go-moment.sh
 
 # ENTRYPOINT ["/entrypoint.sh"]
