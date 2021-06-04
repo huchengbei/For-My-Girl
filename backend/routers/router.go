@@ -2,6 +2,7 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/huchengbei/for-my-girl/backend/middleware"
 	"github.com/huchengbei/for-my-girl/backend/middleware/jwt"
 	"github.com/huchengbei/for-my-girl/backend/pkg/setting"
 	routersApi "github.com/huchengbei/for-my-girl/backend/routers/api"
@@ -15,6 +16,8 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Logger())
 
 	r.Use(gin.Recovery())
+
+	r.Use(middleware.FrontendFileHandler())
 
 	r.GET("/auth", routersApi.GetAuth)
 
