@@ -1,7 +1,7 @@
 FROM node:14.17 as vuebuilder
 WORKDIR /home/node/app
 RUN npm config set registry https://registry.npm.taobao.org/
-COPY ./frontend /home/node/app
+RUN git clone https://github.com/huchengbei/For-My-Girl-Frontend.git /home/node/app
 RUN npm i
 RUN yarn build
 
