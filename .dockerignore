@@ -1,1 +1,6 @@
-/frontend/node_modules
+.idea
+.vscode
+backup
+runtime
+html
+build

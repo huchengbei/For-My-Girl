@@ -2,3 +2,6 @@
 .vscode
 backup
 runtime
+html
+build
+conf/app.ini
