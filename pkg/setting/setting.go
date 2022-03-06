@@ -1,28 +1,31 @@
 package setting
 
 import (
-	"github.com/go-ini/ini"
+	"gopkg.in/yaml.v3"
+	"io/ioutil"
 	"log"
 	"time"
 )
 
 var (
-	Cfg *ini.File
+	CfgMap map[interface{}]interface{}
 
 	RunMode string
 
-	HTTPPort int
-	ReadTimeout time.Duration
+	HTTPPort     int
+	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
 
 	JwtSecret string
 )
 
-func init()  {
-	var err error
-	Cfg, err = ini.Load("conf/app.ini")
+func init() {
+	file, err := ioutil.ReadFile("conf/app.yaml")
 	if err != nil {
-		log.Fatalf("Fail to parse 'conf/app.ini': %v", err)
+		log.Fatalf("Fail to load 'conf/app.yaml': %v", err)
+	}
+	if yaml.Unmarshal(file, &CfgMap) != nil {
+		log.Fatalf("error: %v", err)
 	}
 
 	LoadBase()
@@ -30,26 +33,20 @@ func init()  {
 	LoadApp()
 }
 
-func LoadBase()  {
-	RunMode = Cfg.Section("").Key("RUN_MODE").MustString("debug")
+func LoadBase() {
+	RunMode = CfgMap["RUN_MODE"].(string)
 }
 
-func LoadServer()  {
-	sec, err := Cfg.GetSection("server")
-	if err != nil {
-		log.Fatalf("Fail to get section 'server': %v", err)
-	}
+func LoadServer() {
+	server := CfgMap["server"].(map[string]interface{})
 
-	HTTPPort = sec.Key("HTTP_PORT").MustInt(8000)
-	ReadTimeout = time.Duration(sec.Key("READ_TIMEOUT").MustInt(60)) * time.Second
-	WriteTimeout = time.Duration(sec.Key("WRITE_TIMEOUT").MustInt(60)) * time.Second
+	HTTPPort = server["HTTP_PORT"].(int)
+	ReadTimeout = time.Duration(server["READ_TIMEOUT"].(int)) * time.Second
+	WriteTimeout = time.Duration(server["WRITE_TIMEOUT"].(int)) * time.Second
 }
 
-func LoadApp()  {
-	sec, err := Cfg.GetSection("app")
-	if err != nil {
-		log.Fatalf("Fail to get section 'app': %v", err)
-	}
+func LoadApp() {
+	appCfg := CfgMap["app"].(map[string]interface{})
 
-	JwtSecret = sec.Key("JWT_SECRET").MustString("123456")
+	JwtSecret = appCfg["JWT_SECRET"].(string)
 }

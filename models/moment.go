@@ -20,7 +20,7 @@ type Moment struct {
 }
 
 func GetMoments() (moments []Moment) {
-	db.Table("moment").Order("datetime desc").Find(&moments)
+	db.Order("datetime desc").Find(&moments)
 	return
 }
 
@@ -32,7 +32,7 @@ func AddMoment(title string, content string, datetimeStr string, link string, mo
 		return false
 	}
 
-	db.Table("moment").Create(&Moment{
+	db.Create(&Moment{
 		Title:      title,
 		Content:    content,
 		Datetime:   datetime,
@@ -55,7 +55,7 @@ func EditMoment(id int, title string, content string, datetimeStr string, link s
 		return false
 	}
 	var moment Moment
-	db.Table("moment").Where("id = ?", id).First(&moment)
+	db.Where("id = ?", id).First(&moment)
 
 	moment.Title = title
 	moment.Content = content
@@ -67,15 +67,15 @@ func EditMoment(id int, title string, content string, datetimeStr string, link s
 	moment.MomentType = musicLink
 	moment.VideoLink = videoLink
 
-	db.Table("moment").Save(&moment)
+	db.Save(&moment)
 
 	return true
 }
 
 func DeleteMoment(id int) bool {
 	var moment Moment
-	db.Table("moment").Where("id = ?", id).First(&moment)
-	db.Table("moment").Delete(&moment)
+	db.Where("id = ?", id).First(&moment)
+	db.Delete(&moment)
 
 	return true
 }

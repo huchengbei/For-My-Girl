@@ -1,0 +1,22 @@
+RUN_MODE:  debug
+
+app:
+  JWT_SECRET: "123456"
+
+server:
+  HTTP_PORT: 8000
+  READ_TIMEOUT: 60
+  WRITE_TIMEOUT: 60
+
+database:
+  TYPE: sqlite
+  MYSQL:
+    USER: username
+    PASSWORD: password
+    HOST: host_ip:port
+    NAME: database_name
+    TABLE_PREFIX:
+  SQLITE:
+    PATH: data.db
+    NAME: main
+    TABLE_PREFIX:

@@ -6,25 +6,25 @@ import (
 
 type Slide struct {
 	gorm.Model
-	Title string `json:"title"`
+	Title       string `json:"title"`
 	Description string `json:"description"`
-	ImageLink string `json:"image_link"`
-	IsShow	bool `json:"is_show"`
-	Sequence int `json:"sequence"`
+	ImageLink   string `json:"image_link"`
+	IsShow      bool   `json:"is_show"`
+	Sequence    int    `json:"sequence"`
 }
 
 func GetSlides() (slides []Slide) {
-	db.Table("slide").Order("sequence").Order("updated_at desc").Find(&slides)
+	db.Order("sequence").Order("updated_at desc").Find(&slides)
 	return
 }
 
 func AddSlide(title string, description string, imageLink string, isShow bool, sequence int) bool {
-	db.Table("slide").Create(&Slide{
-		Title:      title,
-		Description:    description,
-		ImageLink:  imageLink,
-		IsShow:  isShow,
-		Sequence:  sequence,
+	db.Create(&Slide{
+		Title:       title,
+		Description: description,
+		ImageLink:   imageLink,
+		IsShow:      isShow,
+		Sequence:    sequence,
 	})
 
 	return true
@@ -33,7 +33,7 @@ func AddSlide(title string, description string, imageLink string, isShow bool, s
 func EditSlide(id int, title string, description string, imageLink string, isShow bool, sequence int) bool {
 
 	var slide Slide
-	db.Table("slide").Where("id = ?", id ).First(&slide)
+	db.Where("id = ?", id).First(&slide)
 
 	slide.Title = title
 	slide.Description = description
@@ -41,16 +41,15 @@ func EditSlide(id int, title string, description string, imageLink string, isSho
 	slide.IsShow = isShow
 	slide.Sequence = sequence
 
-	db.Table("slide").Save(&slide)
+	db.Save(&slide)
 
 	return true
 }
 
 func DeleteSlide(id int) bool {
 	var slide Slide
-	db.Table("slide").Where("id = ?", id ).First(&slide)
+	db.Table("slide").Where("id = ?", id).First(&slide)
 	db.Table("slide").Delete(&slide)
 
 	return true
 }
-
